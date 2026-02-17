@@ -18,7 +18,7 @@ public class AppDbContext : DbContext
         if (!optionsBuilder.IsConfigured)
         {
             optionsBuilder.UseSqlServer(
-                "Server=db41759.public.databaseasp.net; Database=db41759; User Id=db41759; Password=Xa6?=7BqdT!4; Encrypt=True; TrustServerCertificate=True; MultipleActiveResultSets=True;");
+                "Server=db41761.public.databaseasp.net; Database=db41761; User Id=db41761; Password=5t!YZ7z+3x@N; Encrypt=True; TrustServerCertificate=True; MultipleActiveResultSets=True;");
         }
     }
 }

@@ -2,10 +2,17 @@
 using Microsoft.EntityFrameworkCore;
 
 var options = new DbContextOptionsBuilder<AppDbContext>()
-    .UseSqlServer("Server=db41759.public.databaseasp.net; Database=db41759; User Id=db41759; Password=Xa6?=7BqdT!4; Encrypt=True; TrustServerCertificate=True; MultipleActiveResultSets=True;")
+    .UseSqlServer("Server=db41761.public.databaseasp.net; Database=db41761; User Id=db41761; Password=5t!YZ7z+3x@N; Encrypt=True; TrustServerCertificate=True; MultipleActiveResultSets=True;")
     .Options;
 
-using var context = new AppDbContext(options);
+await using var context = new AppDbContext(options);
 
 
+
+var books = await context.Books.ToListAsync();
+
+foreach (var book in books)
+{
+    Console.WriteLine($"Kitap Id: {book.Id} -- Kitap Adi: {book.Title} -- Yazar Adi: {book.Author}");
+}
 
