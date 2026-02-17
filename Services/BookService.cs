@@ -105,7 +105,7 @@ public class BookService(AppDbContext context)
             }
         }
         
-        return input;
+        return input; // Her kelimenin ilk harfi büyük olacak şekilde düzenleme yapilabilir
     }
 
 
