@@ -1,4 +1,5 @@
 ﻿using EntityFramework.Context;
+using EntityFramework.Services;
 using Microsoft.EntityFrameworkCore;
 
 var options = new DbContextOptionsBuilder<AppDbContext>()
@@ -7,12 +8,18 @@ var options = new DbContextOptionsBuilder<AppDbContext>()
 
 await using var context = new AppDbContext(options);
 
+var bookService = new BookService(context);
 
-
-var books = await context.Books.ToListAsync();
-
-foreach (var book in books)
+while (true)
 {
-    Console.WriteLine($"Kitap Id: {book.Id} -- Kitap Adi: {book.Title} -- Yazar Adi: {book.Author}");
-}
+    var input = MenuService.ShowMenu();
 
+    switch (input)
+    {
+        case "1":
+            await bookService.GetAllBooksAsync();
+            break;
+        default:
+            break;
+    }
+}
