@@ -2,6 +2,8 @@ using EntityFramework.Context;
 using EntityFramework.Entites;
 using Microsoft.EntityFrameworkCore;
 
+namespace EntityFramework.Services;
+
 public class BookService(AppDbContext context)
 {
     public async Task GetAllBooksAsync()
@@ -16,61 +18,106 @@ public class BookService(AppDbContext context)
     public async Task<bool> CreateBookAsync()
     {
         Console.WriteLine("Kitap Adi:");
-        string title = Console.ReadLine() ?? string.Empty;
+        var title = GetTextInput();
+
         Console.WriteLine("Yazar Adi:");
-        string author = Console.ReadLine() ?? string.Empty;
+        var author = GetTextInput();
+
         await context.Books.AddAsync(new Book { Title = title, Author = author });
-        int Result= await context.SaveChangesAsync();
+        await context.SaveChangesAsync();
         return true;
     }
-    
-    public async Task<bool> DeleteBookAsync()
+
+    public async Task DeleteBookAsync()
     {
         Console.WriteLine("Silinecek Kitap Id'si:");
-        int id = int.Parse(Console.ReadLine() ?? "0");
-         var book = await context.Books.FindAsync(id);
-        if (book == null)        {
+        int id = GetIntInput();
+
+        var book = await context.Books.FindAsync(id);
+        if (book == null)
+        {
             Console.WriteLine("Kitap bulunamadi.");
-            return false;
+            return;
         }
+
         context.Books.Remove(book);
         await context.SaveChangesAsync();
-        return true;
     }
-    
-    public async Task<bool> BorrowBookAsync()
+
+    public async Task BorrowBookAsync()
     {
         Console.WriteLine("Odunc alinacak Kitap Id'si:");
-        int id = int.Parse(Console.ReadLine() ?? "0");
+        int id = GetIntInput();
+
         var book = await context.Books.FindAsync(id);
-        if (book == null)        {
+        if (book == null)
+        {
             Console.WriteLine("Kitap bulunamadi.");
-            return false;
+            return ;
         }
-        if (!book.isAvailable)        {
+
+        if (!book.isAvailable)
+        {
             Console.WriteLine("Kitap zaten odunc alinmis.");
-            return false;
+            return ;
         }
+
         book.isAvailable = false;
         await context.SaveChangesAsync();
-        return true;
+
     }
-    
-    public async Task<bool> ReturnBookAsync()
+
+    public async Task ReturnBookAsync()
     {
         Console.WriteLine("İade edilecek Kitap Id'si:");
-        int id = int.Parse(Console.ReadLine() ?? "0");
+        int id = GetIntInput();
+
         var book = await context.Books.FindAsync(id);
-        if (book == null)        {
+        if (book == null)
+        {
             Console.WriteLine("Kitap bulunamadi.");
-            return false;
+            return ;
         }
-        if (book.isAvailable)        {
+
+        if (book.isAvailable)
+        {
             Console.WriteLine("Kitap zaten iade edilmis.");
-            return false;
+            return ;
         }
+
         book.isAvailable = true;
         await context.SaveChangesAsync();
-        return true;
+
+    }
+
+
+    private static string GetTextInput()
+    {
+        var input = string.Empty;
+        
+        while (string.IsNullOrEmpty(input)) 
+        {
+            input = Console.ReadLine()?.Trim() ?? string.Empty;
+            
+            if (string.IsNullOrEmpty(input))
+            {
+                Console.WriteLine("Gecersiz girdi. Lutfen tekrar deneyin.");
+            }
+        }
+        
+        return input;
+    }
+
+
+    private static int GetIntInput()
+    {
+        int input;
+        
+        while (!int.TryParse(Console.ReadLine(), out input))
+        {
+            Console.WriteLine("Gecersiz girdi. Tekrar Deneyiniz");
+        }
+        
+        return input;
     }
 }

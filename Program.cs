@@ -19,7 +19,17 @@ while (true)
         case "1":
             await bookService.GetAllBooksAsync();
             break;
-        default:
+        case "2":
+            await bookService.CreateBookAsync();
+            break;
+        case "3":
+            await bookService.DeleteBookAsync();
+            break;
+        case "4":
+            await bookService.BorrowBookAsync();
+            break;
+        case "5":
+            await bookService.ReturnBookAsync();
             break;
     }
 }
